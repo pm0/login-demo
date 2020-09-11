@@ -34,4 +34,13 @@ body,
     font-family: "Inter", sans-serif;
     text-transform: uppercase;
   }
+
+  .button-spinner-wrapper {
+    display: flex;
+    align-items: center;
+
+    div[class^="spinner-"] {
+      margin-left: 1rem;
+    }
+  }
 }
