@@ -77,7 +77,7 @@ function RegistrationPage() {
           value={form.name}
           error={formErrors.name}
           onChange={e => onFormChange("name", e.target.value)}
-          onFormSubmit={onFormSubmit}
+          onEnterHandler={onFormSubmit}
           validationRegex={NAME_REGEX}
           disabled={submitting}
         />
@@ -89,7 +89,7 @@ function RegistrationPage() {
           value={form.email}
           error={formErrors.email}
           onChange={e => onFormChange("email", e.target.value)}
-          onFormSubmit={onFormSubmit}
+          onEnterHandler={onFormSubmit}
           validationRegex={EMAIL_REGEX}
           disabled={submitting}
         />
@@ -101,7 +101,7 @@ function RegistrationPage() {
           value={form.password}
           error={formErrors.password}
           onChange={e => onFormChange("password", e.target.value)}
-          onFormSubmit={onFormSubmit}
+          onEnterHandler={onFormSubmit}
           validationRegex={PASSWORD_REGEX}
           disabled={submitting}
         >

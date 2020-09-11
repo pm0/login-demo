@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import "./PageTemplate.scss";
 
 function PageTemplate(props) {
-  const { title, heading, noPadding, size, children } = props;
+  const { title, heading, size, children } = props;
 
   useEffect(() => {
     document.title = `${title} | Demo Site`;
@@ -16,7 +16,7 @@ function PageTemplate(props) {
     size === "lg" ? { span: 8, offset: 2 } : { span: 6, offset: 3 };
 
   return (
-    <div className={`page${noPadding ? " no-padding" : ""}`}>
+    <div className="page">
       <Container>
         <Row>
           <Col xs={colSize}>

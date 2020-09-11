@@ -66,7 +66,7 @@ function LoginPage() {
           value={form.email}
           error={formErrors.email}
           onChange={e => onFormChange("email", e.target.value)}
-          onFormSubmit={onFormSubmit}
+          onEnterHandler={onFormSubmit}
           disabled={submitting}
         />
 
@@ -77,7 +77,7 @@ function LoginPage() {
           value={form.password}
           error={formErrors.password}
           onChange={e => onFormChange("password", e.target.value)}
-          onFormSubmit={onFormSubmit}
+          onEnterHandler={onFormSubmit}
           disabled={submitting}
         />
       </Form>
