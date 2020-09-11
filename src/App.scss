@@ -1,0 +1,37 @@
+@import "./bootstrap-custom";
+
+html,
+body,
+#root,
+.app {
+  height: 100%;
+}
+
+.app {
+  font-family: "Source Sans Pro", sans-serif;
+  padding-top: 4rem;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Inter", sans-serif;
+  }
+
+  b {
+    font-weight: 600;
+  }
+
+  .form-label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  button {
+    font-family: "Inter", sans-serif;
+    text-transform: uppercase;
+  }
+}
