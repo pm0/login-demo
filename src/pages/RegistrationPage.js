@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-
+import PageTemplate from "./PageTemplate";
 import FormInputGroup from "../components/FormInputGroup";
 import {
   NAME_REGEX,
   EMAIL_REGEX,
   PASSWORD_REGEX
 } from "../helpers/RegexConstants";
-import "./RegistrationPage.scss";
 
 const initialFormValues = {
   name: "",
@@ -37,7 +32,6 @@ function RegistrationPage() {
       ...formErrors,
       [field]: ""
     });
-    setSubmitCompleted(false);
   }
 
   function onFormSubmit() {
@@ -55,7 +49,6 @@ function RegistrationPage() {
     }
 
     if (!nameError && !emailError && !passwordError) {
-      // Placeholder for submit form
       setSubmitting(true);
       setSubmitCompleted(false);
 
@@ -75,90 +68,76 @@ function RegistrationPage() {
   }
 
   return (
-    <div className="registration-page">
-      <Container>
-        <Row>
-          <Col xs={{ span: 6, offset: 3 }}>
-            <h1 className="registration-header">Registration Demo</h1>
-            <Card className="registration-card">
-              <Card.Body>
-                <Form>
-                  <FormInputGroup
-                    id="registration-form-name"
-                    type="text"
-                    label="Name"
-                    value={form.name}
-                    error={formErrors.name}
-                    onChange={e => onFormChange("name", e.target.value)}
-                    validationRegex={NAME_REGEX}
-                    disabled={submitting}
-                  />
+    <PageTemplate title="Register" heading="Demo Registration">
+      <Form>
+        <FormInputGroup
+          id="registration-form-name"
+          type="text"
+          label="Name"
+          value={form.name}
+          error={formErrors.name}
+          onChange={e => onFormChange("name", e.target.value)}
+          onFormSubmit={onFormSubmit}
+          validationRegex={NAME_REGEX}
+          disabled={submitting}
+        />
 
-                  <FormInputGroup
-                    id="registration-form-email"
-                    type="text"
-                    label="Email Address"
-                    value={form.email}
-                    error={formErrors.email}
-                    onChange={e => onFormChange("email", e.target.value)}
-                    validationRegex={EMAIL_REGEX}
-                    disabled={submitting}
-                  />
+        <FormInputGroup
+          id="registration-form-email"
+          type="text"
+          label="Email Address"
+          value={form.email}
+          error={formErrors.email}
+          onChange={e => onFormChange("email", e.target.value)}
+          onFormSubmit={onFormSubmit}
+          validationRegex={EMAIL_REGEX}
+          disabled={submitting}
+        />
 
-                  <FormInputGroup
-                    id="registration-form-password"
-                    type="password"
-                    label="Password"
-                    value={form.password}
-                    error={formErrors.password}
-                    onChange={e => onFormChange("password", e.target.value)}
-                    validationRegex={PASSWORD_REGEX}
-                    disabled={submitting}
-                  >
-                    <Form.Text muted>
-                      Must be 12+ characters long, have one or more uppercase
-                      letters and one or more symbols
-                    </Form.Text>
-                  </FormInputGroup>
-                </Form>
+        <FormInputGroup
+          id="registration-form-password"
+          type="password"
+          label="Password"
+          value={form.password}
+          error={formErrors.password}
+          onChange={e => onFormChange("password", e.target.value)}
+          onFormSubmit={onFormSubmit}
+          validationRegex={PASSWORD_REGEX}
+          disabled={submitting}
+        >
+          <Form.Text muted>
+            Must be 12+ characters long, have one or more uppercase letters and
+            one or more symbols
+          </Form.Text>
+        </FormInputGroup>
+      </Form>
 
-                <div className="button-spinner-wrapper">
-                  <Button
-                    variant="primary"
-                    onClick={onFormSubmit}
-                    disabled={submitting}
-                  >
-                    Register
-                  </Button>
+      <div className="button-spinner-wrapper">
+        <Button variant="primary" onClick={onFormSubmit} disabled={submitting}>
+          Register
+        </Button>
 
-                  {submitting && (
-                    <Spinner animation="border" variant="primary" />
-                  )}
-                </div>
+        {submitting && <Spinner animation="border" variant="primary" />}
+      </div>
 
-                {!submitting && !submitCompleted && (
-                  <div className="registration-log-in">
-                    <span>Existing user?&nbsp;</span>
-                    <Link to="/login">
-                      <b>Log in here</b>
-                    </Link>
-                  </div>
-                )}
+      {!submitting && !submitCompleted && (
+        <div className="page-footer-text">
+          <span>Existing user?&nbsp;</span>
+          <Link to="/login">
+            <b>Log in here</b>
+          </Link>
+        </div>
+      )}
 
-                {submitCompleted && (
-                  <div className="registration-log-in">
-                    <span>Thanks for registering. Please&nbsp;</span>
-                    <Link to="/login">
-                      <b>log in here</b>
-                    </Link>
-                  </div>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+      {submitCompleted && (
+        <div className="page-footer-text">
+          <span>Thanks for registering. Please&nbsp;</span>
+          <Link to="/login">
+            <b>log in here</b>
+          </Link>
+        </div>
+      )}
+    </PageTemplate>
   );
 }
 

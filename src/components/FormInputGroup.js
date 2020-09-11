@@ -9,6 +9,7 @@ export default function FormInputGroup(props) {
     value,
     error,
     onChange,
+    onFormSubmit,
     validationRegex,
     disabled,
     children
@@ -22,6 +23,11 @@ export default function FormInputGroup(props) {
         type={type}
         value={value}
         onChange={onChange}
+        onKeyPress={e => {
+          if (e.key === "Enter") {
+            onFormSubmit();
+          }
+        }}
         isValid={validationRegex && value && regexTest}
         isInvalid={(validationRegex && value && !regexTest) || error}
         disabled={disabled}

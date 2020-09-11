@@ -1,0 +1,19 @@
+.page {
+  padding-bottom: 4rem;
+
+  .page-header {
+    text-align: center;
+  }
+
+  .page-card {
+    margin-top: 1.5rem;
+  }
+  &.no-padding .page-card .card-body {
+    padding: 0;
+  }
+
+  .page-footer-text {
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+}
