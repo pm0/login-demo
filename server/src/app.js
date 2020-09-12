@@ -9,7 +9,6 @@ const port = 3001;
 app.use(express.json());
 
 app.post("/register", async (req, res) => {
-  console.log(req.body);
   const { name, email, password } = req.body;
   if (name && email && password) {
     const users = await db.getUserByEmail(email);
@@ -21,7 +20,19 @@ app.post("/register", async (req, res) => {
         }
       });
     } else {
-      res.send("ok"); // TODO register user
+      const response = await db.addUser(name, email, password);
+      if (response.status === "error") {
+        console.error("Error registering user: " + response.error);
+        res.status(400);
+        res.send({
+          validationErrors: {
+            form: "Sorry something went wrong, please try again"
+          }
+        });
+      } else {
+        res.status(200);
+        res.send("ok");
+      }
     }
   } else {
     console.error("Invalid registration form data");
