@@ -10,16 +10,23 @@ import {
   EMAIL_REGEX,
   PASSWORD_REGEX
 } from "../helpers/RegexConstants";
+import { submitRegistrationForm } from "../helpers/APIConnector";
 
 const initialFormValues = {
   name: "",
   email: "",
   password: ""
 };
+const initialFormErrors = {
+  name: "",
+  email: "",
+  password: "",
+  form: ""
+};
 
 function RegistrationPage() {
   const [form, setForm] = useState({ ...initialFormValues });
-  const [formErrors, setFormErrors] = useState({ ...initialFormValues });
+  const [formErrors, setFormErrors] = useState({ ...initialFormErrors });
   const [submitting, setSubmitting] = useState(false);
   const [submitCompleted, setSubmitCompleted] = useState(false);
 
@@ -34,7 +41,7 @@ function RegistrationPage() {
     });
   }
 
-  function onFormSubmit() {
+  async function onFormSubmit() {
     let nameError = "",
       emailError = "",
       passwordError = "";
@@ -48,23 +55,31 @@ function RegistrationPage() {
       passwordError = "Please enter a valid password";
     }
 
-    if (!nameError && !emailError && !passwordError) {
+    if (nameError || emailError || passwordError) {
+      setFormErrors({
+        name: nameError,
+        email: emailError,
+        password: passwordError
+      });
+    } else {
       setSubmitting(true);
       setSubmitCompleted(false);
+      setFormErrors({ ...initialFormErrors });
 
-      setTimeout(() => {
-        setSubmitting(false);
+      const response = await submitRegistrationForm(form);
+
+      setSubmitting(false);
+
+      if (response.status === 200) {
         setForm({ ...initialFormValues });
-        setFormErrors({ ...initialFormValues });
         setSubmitCompleted(true);
-      }, 1000);
+      } else if (response.data.validationErrors) {
+        setFormErrors({
+          ...initialFormErrors,
+          ...response.data.validationErrors
+        });
+      }
     }
-
-    setFormErrors({
-      name: nameError,
-      email: emailError,
-      password: passwordError
-    });
   }
 
   return (
@@ -118,6 +133,12 @@ function RegistrationPage() {
         </Button>
 
         {submitting && <Spinner animation="border" variant="primary" />}
+      </div>
+
+      <div>
+        <Form.Control.Feedback type="invalid" style={{ display: "block" }}>
+          {formErrors.form}
+        </Form.Control.Feedback>
       </div>
 
       {!submitting && !submitCompleted && (
