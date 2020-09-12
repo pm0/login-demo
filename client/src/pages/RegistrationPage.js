@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import PageTemplate from "./PageTemplate";
+import Form from "react-bootstrap/Form";
+import FormPageTemplate from "../pageTemplates/FormPageTemplate";
 import FormInputGroup from "../components/FormInputGroup";
 import {
   NAME_REGEX,
@@ -83,64 +82,59 @@ function RegistrationPage() {
   }
 
   return (
-    <PageTemplate title="Register" heading="Demo Registration">
-      <Form>
-        <FormInputGroup
-          id="registration-form-name"
-          type="text"
-          label="Name"
-          value={form.name}
-          error={formErrors.name}
-          onChange={e => onFormChange("name", e.target.value)}
-          onEnterHandler={onFormSubmit}
-          validationRegex={NAME_REGEX}
-          disabled={submitting}
-        />
-
-        <FormInputGroup
-          id="registration-form-email"
-          type="text"
-          label="Email Address"
-          value={form.email}
-          error={formErrors.email}
-          onChange={e => onFormChange("email", e.target.value)}
-          onEnterHandler={onFormSubmit}
-          validationRegex={EMAIL_REGEX}
-          disabled={submitting}
-        />
-
-        <FormInputGroup
-          id="registration-form-password"
-          type="password"
-          label="Password"
-          value={form.password}
-          error={formErrors.password}
-          onChange={e => onFormChange("password", e.target.value)}
-          onEnterHandler={onFormSubmit}
-          validationRegex={PASSWORD_REGEX}
-          disabled={submitting}
-        >
-          <Form.Text muted>
-            Must be 12+ characters long, have one or more uppercase letters and
-            one or more symbols
-          </Form.Text>
-        </FormInputGroup>
-      </Form>
-
-      <div className="button-spinner-wrapper">
+    <FormPageTemplate
+      title="Register"
+      heading="Demo Registration"
+      inputs={
+        <>
+          <FormInputGroup
+            id="registration-form-name"
+            type="text"
+            label="Name"
+            value={form.name}
+            error={formErrors.name}
+            onChange={e => onFormChange("name", e.target.value)}
+            onEnterHandler={onFormSubmit}
+            validationRegex={NAME_REGEX}
+            disabled={submitting}
+          />
+          <FormInputGroup
+            id="registration-form-email"
+            type="text"
+            label="Email Address"
+            value={form.email}
+            error={formErrors.email}
+            onChange={e => onFormChange("email", e.target.value)}
+            onEnterHandler={onFormSubmit}
+            validationRegex={EMAIL_REGEX}
+            disabled={submitting}
+          />
+          <FormInputGroup
+            id="registration-form-password"
+            type="password"
+            label="Password"
+            value={form.password}
+            error={formErrors.password}
+            onChange={e => onFormChange("password", e.target.value)}
+            onEnterHandler={onFormSubmit}
+            validationRegex={PASSWORD_REGEX}
+            disabled={submitting}
+          >
+            <Form.Text muted>
+              Must be 12+ characters long, have one or more uppercase letters
+              and one or more symbols
+            </Form.Text>
+          </FormInputGroup>
+        </>
+      }
+      submitButton={
         <Button variant="primary" onClick={onFormSubmit} disabled={submitting}>
           Register
         </Button>
-
-        {submitting && <Spinner animation="border" variant="primary" />}
-      </div>
-
-      <div>
-        <Form.Control.Feedback type="invalid" style={{ display: "block" }}>
-          {formErrors.form}
-        </Form.Control.Feedback>
-      </div>
-
+      }
+      submitting={submitting}
+      generalFormError={formErrors.form}
+    >
       {!submitting && !submitCompleted && (
         <div className="page-footer-text">
           <span>Existing user?&nbsp;</span>
@@ -149,7 +143,6 @@ function RegistrationPage() {
           </Link>
         </div>
       )}
-
       {submitCompleted && (
         <div className="page-footer-text">
           <span>Thanks for registering. Please&nbsp;</span>
@@ -158,7 +151,7 @@ function RegistrationPage() {
           </Link>
         </div>
       )}
-    </PageTemplate>
+    </FormPageTemplate>
   );
 }
 

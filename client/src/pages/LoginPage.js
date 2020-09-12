@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import PageTemplate from "./PageTemplate";
+import FormPageTemplate from "../pageTemplates/FormPageTemplate";
 import FormInputGroup from "../components/FormInputGroup";
+import { submitLogin } from "../helpers/APIConnector";
 
 const initialFormValues = {
   email: "",
   password: ""
 };
+const initialFormErrors = {
+  email: "",
+  password: "",
+  form: ""
+};
 
 function LoginPage() {
   const [form, setForm] = useState({ ...initialFormValues });
-  const [formErrors, setFormErrors] = useState({ ...initialFormValues });
+  const [formErrors, setFormErrors] = useState({ ...initialFormErrors });
   const [submitting, setSubmitting] = useState(false);
   let history = useHistory();
 
@@ -28,7 +32,7 @@ function LoginPage() {
     });
   }
 
-  function onFormSubmit() {
+  async function onFormSubmit() {
     let emailError = "",
       passwordError = "";
 
@@ -41,13 +45,21 @@ function LoginPage() {
 
     if (!emailError && !passwordError) {
       setSubmitting(true);
+      setFormErrors({ ...initialFormErrors });
 
-      setTimeout(() => {
-        setSubmitting(false);
+      const response = await submitLogin(form);
+
+      setSubmitting(false);
+
+      if (response.status === 200) {
         setForm({ ...initialFormValues });
-        setFormErrors({ ...initialFormValues });
         history.push("/users");
-      }, 1000);
+      } else if (response.data.validationErrors) {
+        setFormErrors({
+          ...initialFormErrors,
+          ...response.data.validationErrors
+        });
+      }
     }
 
     setFormErrors({
@@ -57,39 +69,41 @@ function LoginPage() {
   }
 
   return (
-    <PageTemplate title="Login" heading="Demo Login">
-      <Form>
-        <FormInputGroup
-          id="login-form-email"
-          type="text"
-          label="Email Address"
-          value={form.email}
-          error={formErrors.email}
-          onChange={e => onFormChange("email", e.target.value)}
-          onEnterHandler={onFormSubmit}
-          disabled={submitting}
-        />
-
-        <FormInputGroup
-          id="login-form-password"
-          type="password"
-          label="Password"
-          value={form.password}
-          error={formErrors.password}
-          onChange={e => onFormChange("password", e.target.value)}
-          onEnterHandler={onFormSubmit}
-          disabled={submitting}
-        />
-      </Form>
-
-      <div className="button-spinner-wrapper">
+    <FormPageTemplate
+      title="Login"
+      heading="Demo Login"
+      inputs={
+        <>
+          <FormInputGroup
+            id="login-form-email"
+            type="text"
+            label="Email Address"
+            value={form.email}
+            error={formErrors.email}
+            onChange={e => onFormChange("email", e.target.value)}
+            onEnterHandler={onFormSubmit}
+            disabled={submitting}
+          />
+          <FormInputGroup
+            id="login-form-password"
+            type="password"
+            label="Password"
+            value={form.password}
+            error={formErrors.password}
+            onChange={e => onFormChange("password", e.target.value)}
+            onEnterHandler={onFormSubmit}
+            disabled={submitting}
+          />
+        </>
+      }
+      submitButton={
         <Button variant="primary" onClick={onFormSubmit} disabled={submitting}>
           Log in
         </Button>
-
-        {submitting && <Spinner animation="border" variant="primary" />}
-      </div>
-
+      }
+      submitting={submitting}
+      generalFormError={formErrors.form}
+    >
       {!submitting && (
         <div className="page-footer-text">
           <span>New user?&nbsp;</span>
@@ -98,7 +112,7 @@ function LoginPage() {
           </Link>
         </div>
       )}
-    </PageTemplate>
+    </FormPageTemplate>
   );
 }
 

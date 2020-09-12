@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import faker from "faker";
-import PageTemplate from "./PageTemplate";
+import PageTemplate from "../pageTemplates/PageTemplate";
 import UserSearch from "../components/UserSearch";
 import UsersTable from "../components/UsersTable";
 import LogoutButton from "../components/LogoutButton";
