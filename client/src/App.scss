@@ -11,6 +11,10 @@ body,
   font-family: "Source Sans Pro", sans-serif;
   padding-top: 4rem;
 
+  @include media-breakpoint-down(sm) {
+    padding-top: 6rem;
+  }
+
   h1,
   h2,
   h3,

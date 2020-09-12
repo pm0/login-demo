@@ -61,11 +61,6 @@ function LoginPage() {
         });
       }
     }
-
-    setFormErrors({
-      email: emailError,
-      password: passwordError
-    });
   }
 
   return (

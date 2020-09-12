@@ -1,0 +1,21 @@
+@import "bootstrap";
+
+.logout-button.btn {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+}
+
+.logout-navbar.navbar {
+  .navbar-nav {
+    padding: 0.5rem 0;
+  }
+
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+}

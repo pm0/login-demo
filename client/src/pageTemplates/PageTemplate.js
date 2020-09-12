@@ -12,14 +12,14 @@ function PageTemplate(props) {
     document.title = `${title} | Demo Site`;
   }, [title]);
 
-  const colSize =
+  const desktopColSize =
     size === "lg" ? { span: 8, offset: 2 } : { span: 6, offset: 3 };
 
   return (
     <div className="page">
       <Container>
         <Row>
-          <Col xs={colSize}>
+          <Col xs={12} md={desktopColSize}>
             <h1 className="page-header">{heading}</h1>
             <Card className="page-card">
               <Card.Body>{children}</Card.Body>

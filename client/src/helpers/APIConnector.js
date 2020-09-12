@@ -17,23 +17,39 @@ export async function submitLogin(form) {
   return response;
 }
 
+export async function logout() {
+  const response = await apiCall("/logout", "get");
+  return response;
+}
+
+export async function fetchUsersList() {
+  const response = await apiCall("/usersList", "get");
+  return response;
+}
+
 async function apiCall(url, method, data) {
   try {
     const response = await axios.request({
       url,
       method,
       data,
-      validateStatus: status => status >= 200 && status < 500
+      validateStatus: status => status >= 200 && status < 401
     });
     return response;
   } catch (error) {
     console.error(error);
-    return {
-      data: {
-        validationErrors: {
-          form: "Sorry something went wrong, please try again"
+    if (error.response.status === 401) {
+      // Session error
+      window.location.href = "/login";
+      return null;
+    } else {
+      return {
+        data: {
+          validationErrors: {
+            form: "Sorry something went wrong, please try again"
+          }
         }
-      }
-    };
+      };
+    }
   }
 }

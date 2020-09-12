@@ -2,12 +2,38 @@ require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
+const mongoose = require("mongoose");
 const db = require("./dbConnector");
 const encrypt = require("./encryptManager");
 
 const app = express();
 const port = 3001;
 app.use(express.json());
+
+const SESSION_COOKIE_NAME = "session_id";
+app.use(cookieParser());
+app.use(
+  session({
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    name: SESSION_COOKIE_NAME
+  })
+);
+
+const authMiddleware = (req, res, next) => {
+  if (req.cookies[SESSION_COOKIE_NAME] && req.session && req.session.user) {
+    res.set("Cache-Control", "no-store");
+    return next();
+  } else {
+    res.status(401);
+    res.send({ sessionError: true });
+  }
+};
 
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
@@ -53,6 +79,7 @@ app.post("/login", async (req, res) => {
     if (user) {
       const valid = encrypt.verifyPassword(password, user.password);
       if (valid) {
+        req.session.user = user._id;
         res.status(200);
         res.send("ok");
       } else {
@@ -82,10 +109,16 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/users", async (req, res) => {
+app.get("/logout", (req, res) => {
+  res.clearCookie(SESSION_COOKIE_NAME);
+  req.session.destroy();
+  res.status(200);
+  res.send("ok");
+});
+
+app.get("/usersList", authMiddleware, async (req, res) => {
   const users = await db.getUsersList();
-  console.log(users);
-  res.send("Hello World!");
+  res.send(users);
 });
 
 app.get("*", (req, res) => {
