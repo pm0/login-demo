@@ -11,6 +11,7 @@ const routes = require("./routes");
 const app = express();
 const port = process.env.PORT || 3001;
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "/../../client/build")));
 
 app.use(cookieParser());
 app.use(
@@ -40,7 +41,7 @@ const swaggerSpec = swaggerJSDoc({
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/../../client/build/index.html"));
+  res.sendFile(path.join(__dirname, "/../../client/build", "index.html"));
 });
 
 app.listen(port, () => {
